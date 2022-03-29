@@ -1,0 +1,9 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+app:
+  timeZone: Asia/Seoul
+  weatherUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst
+  dustUrl: http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst
+  serviceKey: HQ8WOmqPZyPM49hp+T6vk0CsBhKzXazTlak2ymPZJILnGOCQWAIN/WzyLu4egvHOW9MELtlIc1NTTwSOHR0gUA==
