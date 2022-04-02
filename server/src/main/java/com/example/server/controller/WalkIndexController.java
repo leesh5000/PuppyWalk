@@ -29,9 +29,9 @@ public class WalkIndexController {
             @ApiImplicitParam(name = "fur", value = "털 종류", required = true),
             @ApiImplicitParam(name = "size", value = "강아지 크기", required = true),
             @ApiImplicitParam(name = "gender", value = "성별", required = true),
-            @ApiImplicitParam(name = "age", value = "나이", dataType = "int", example = "0", required = true),
-            @ApiImplicitParam(name = "lat", value = "위도", dataType = "float", example = "0.0", required = true),
-            @ApiImplicitParam(name = "lng", value = "경도", dataType = "float", example = "0.0", required = true),
+            @ApiImplicitParam(name = "age", value = "나이", dataType = "int", example = "12", required = true),
+            @ApiImplicitParam(name = "lat", value = "위도", dataType = "float", example = "38.43", required = true),
+            @ApiImplicitParam(name = "lng", value = "경도", dataType = "float", example = "127.12", required = true),
             @ApiImplicitParam(name = "address", value = "현재 주소", required = true),
     })
     @ApiResponses({
