@@ -30,7 +30,7 @@ public class WalkIndexService {
 
     public WalkIndexResponse getWalkIndex(Fur fur, Size size, Gender gender, int age, int nx, int ny, Address address) throws Exception {
         LocalDateTime now = LocalDateTime.now();
-        ZonedDateTime zdt = now.atZone(ZoneId.of(appProperties.getTimeZone()));
+        ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of(appProperties.getTimeZone()));
         String baseDate = DateTimeFormatter.ofPattern("yyyyMMdd").format(zdt);
         String baseTime = DateTimeFormatter.ofPattern("HHmm").format(zdt);
 
