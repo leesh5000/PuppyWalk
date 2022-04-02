@@ -16,5 +16,5 @@ public class AppProperties {
     private final String weatherUrl;
     private final String dustUrl;
     private final String serviceKey;
-
+    private final String infoMessage;
 }

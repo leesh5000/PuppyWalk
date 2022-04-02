@@ -12,10 +12,10 @@ public class WeatherInfo {
     private String baseDate;
     private String baseTime;
     private String category;
-    private String fcstDate; // 단기예보 일자
-    private String fcstTime; // 단기예보 시간
-    private String fcstValue; // 측정값
-    private String nx;
-    private String ny;
+    private Integer nx;
+    private Integer ny;
+    private String fcstDate;
+    private String fcstTime;
+    private String fcstValue;
 
 }

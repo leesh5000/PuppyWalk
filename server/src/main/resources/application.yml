@@ -4,6 +4,7 @@ spring:
       matching-strategy: ant_path_matcher
 app:
   timeZone: Asia/Seoul
-  weatherUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst
+  weatherUrl: http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtFcst
   dustUrl: http://apis.data.go.kr/B552584/ArpltnStatsSvc/getCtprvnMesureLIst
   serviceKey: HQ8WOmqPZyPM49hp+T6vk0CsBhKzXazTlak2ymPZJILnGOCQWAIN/WzyLu4egvHOW9MELtlIc1NTTwSOHR0gUA==
+  infoMessage: "날씨점수는 공공데이터 포탈(https://www.data.go.kr/index.do)의 기상 정보와 사용자가 등록한 반려동물의 개별 정보를 이용하여 환산한 추정값으로 참고자료이며, 제공된 편의 정보를 기반으로 한 결과에 책임을 지지 않습니다."
