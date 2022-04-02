@@ -53,6 +53,11 @@ public class WalkIndexService {
             baseTime = "0" + baseTime;
         }
 
+        log.info("zdt = {}", zdt);
+        log.info("baseDate = {}", baseDate);
+        log.info("baseTime = {}", baseTime);
+        log.info("baseTime = {}", baseTime);
+
         StringBuilder urlBuilder = new StringBuilder(appProperties.getDustUrl());
         urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(appProperties.getServiceKey(), StandardCharsets.UTF_8));
         urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8)); /*페이지번호*/
