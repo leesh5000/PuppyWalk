@@ -30,7 +30,7 @@ public class WalkIndexResponse {
     @ApiModelProperty(example = "6시간 후 산책지수", position = 6)
     private String six_hours_walk_index;
     @ApiModelProperty(example = "산책 점수 이유", position = 7)
-    private List<String> reasons = new ArrayList<>();
+    private List<String> reasons;
     @ApiModelProperty(example = "안내문", position = 8)
     private String info_message;
     @ApiModelProperty(example = "현재 기온 (C)", position = 9)
