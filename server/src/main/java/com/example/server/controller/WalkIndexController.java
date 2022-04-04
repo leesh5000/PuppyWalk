@@ -26,7 +26,7 @@ public class WalkIndexController {
     @GetMapping("/api/walk_index")
     @ApiOperation(value = "산책 지수 조회", notes = "산책 지수 조회 API")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "fur", value = "털 종류", required = true),
+            @ApiImplicitParam(name = "fur", value = "털 종류", required = false),
             @ApiImplicitParam(name = "size", value = "강아지 크기", required = true),
             @ApiImplicitParam(name = "gender", value = "성별", required = true),
             @ApiImplicitParam(name = "age", value = "나이", dataType = "int", example = "12", required = true),
@@ -39,7 +39,7 @@ public class WalkIndexController {
             @ApiResponse(code = 500, message = "Internal Server Error"),
     })
     public ResponseEntity<WalkIndexResponse> info(
-            @RequestParam("fur") Fur fur,
+            @RequestParam(value = "fur", required = false, defaultValue = "") Fur fur,
             @RequestParam("size") Size size,
             @RequestParam("gender") Gender gender,
             @RequestParam("age") Integer age,
