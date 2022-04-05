@@ -49,5 +49,7 @@ public class WalkIndexResponse {
     private String humidity;
     @ApiModelProperty(example = "날씨상태", position = 16, allowableValues = "맑음, 구름많음, 흐림, 비, 비/눈, 눈, 소나기")
     private String weather;
+    @ApiModelProperty(example = "강수확률 (%)", position = 17)
+    private String pop;
 
 }

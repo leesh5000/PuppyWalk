@@ -29,7 +29,7 @@ public class WalkIndexService {
     private final AppProperties appProperties;
 
     public WalkIndexResponse getWalkIndex(Fur fur, Size size, Gender gender, int age, int nx, int ny, Address address) throws Exception {
-        LocalDateTime now = LocalDateTime.now();
+
         ZonedDateTime zdt = ZonedDateTime.now(ZoneId.of(appProperties.getTimeZone()));
         String baseDate = DateTimeFormatter.ofPattern("yyyyMMdd").format(zdt);
         String baseTime = DateTimeFormatter.ofPattern("HHmm").format(zdt);
@@ -87,6 +87,25 @@ public class WalkIndexService {
         urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(ny), StandardCharsets.UTF_8)); /*예보지점의 Y 좌표값*/
         URL weatherUrl = new URL(urlBuilder.toString());
 
+        String[] popBaseTimes = new String[]{"2300", "2000", "1700", "1400", "1100", "0800", "0500", "0200"};
+        for (String popBaseTime : popBaseTimes) {
+            if (Integer.parseInt(popBaseTime) < Integer.parseInt(baseTime)) {
+                baseTime = popBaseTime;
+                break;
+            }
+        }
+
+        urlBuilder = new StringBuilder("http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst");
+        urlBuilder.append("?").append(URLEncoder.encode("serviceKey", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(appProperties.getServiceKey(), StandardCharsets.UTF_8));
+        urlBuilder.append("&").append(URLEncoder.encode("pageNo", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("1", StandardCharsets.UTF_8)); /*페이지번호*/
+        urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("10", StandardCharsets.UTF_8)); /*한 페이지 결과 수*/
+        urlBuilder.append("&").append(URLEncoder.encode("dataType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("json", StandardCharsets.UTF_8)); /*요청자료형식(XML/JSON) Default: XML*/
+        urlBuilder.append("&").append(URLEncoder.encode("base_date", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(baseDate, StandardCharsets.UTF_8)); /*‘21년 6월 28일 발표*/
+        urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(baseTime, StandardCharsets.UTF_8)); /*06시 발표(정시단위) */
+        urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(nx), StandardCharsets.UTF_8)); /*예보지점의 X 좌표값*/
+        urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(ny), StandardCharsets.UTF_8)); /*예보지점의 Y 좌표값*/
+        URL popUrl = new URL(urlBuilder.toString());
+
         Gson gson = new Gson();
 
         List<DustInfo> dustInfos = callApi(dustUrl, ApiType.dust).stream()
@@ -103,13 +122,19 @@ public class WalkIndexService {
                 .collect(Collectors.toList())
                 .subList(0, 7);
 
-        // TODO 오늘 최고온도, 최저온도, 습도 추가해야함
         List<WeatherInfo> weatherInfos = callApi(weatherUrl, ApiType.weather).stream()
                 .map(gson::toJson)
                 .map(json -> gson.fromJson(json, WeatherInfo.class))
                 .collect(Collectors.toList());
 
-        return this.calculate(fur, size, gender, age, address, dustInfos, fineDustInfo, weatherInfos);
+        WeatherInfo popInfo = callApi(popUrl, ApiType.weather).stream()
+                .map(gson::toJson)
+                .map(json -> gson.fromJson(json, WeatherInfo.class))
+                .filter(weatherInfo -> weatherInfo.getCategory().equals("POP"))
+                .collect(Collectors.toList())
+                .get(0);
+
+        return this.calculate(fur, size, gender, age, address, dustInfos, fineDustInfo, weatherInfos, popInfo);
     }
 
     private List<Object> callApi(URL url, ApiType apiType) throws Exception {
@@ -143,6 +168,7 @@ public class WalkIndexService {
             Map body = (HashMap) result.get("body");
             if (!header.get("resultCode").equals("00")) {
                 log.error("api response error = {}", header.get("resultCode"));
+                throw new Exception();
             } else {
                 if (apiType.equals(ApiType.dust)) {
                     infos = (ArrayList<Object>) body.get("items");
@@ -167,7 +193,7 @@ public class WalkIndexService {
         return infos;
     }
 
-    private WalkIndexResponse calculate(Fur fur, Size size, Gender gender, int age, Address address, List<DustInfo> dustInfos, List<DustInfo> fineDustInfos, List<WeatherInfo> weatherInfos) {
+    private WalkIndexResponse calculate(Fur fur, Size size, Gender gender, int age, Address address, List<DustInfo> dustInfos, List<DustInfo> fineDustInfos, List<WeatherInfo> weatherInfos, WeatherInfo popInfo) {
 
         // 총 합이 100점이어야 함
         Map<String, String> map = new HashMap<>();
@@ -487,6 +513,7 @@ public class WalkIndexService {
                 .air_speed(wind_speed)
                 .humidity(humidity)
                 .weather(weather)
+                .pop(popInfo.getFcstValue())
                 .build();
     }
 }
