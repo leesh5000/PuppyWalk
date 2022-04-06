@@ -87,10 +87,12 @@ public class WalkIndexService {
         urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(ny), StandardCharsets.UTF_8)); /*예보지점의 Y 좌표값*/
         URL weatherUrl = new URL(urlBuilder.toString());
 
+        String curTime = DateTimeFormatter.ofPattern("HHmm").format(zdt);
         String[] popBaseTimes = new String[]{"2300", "2000", "1700", "1400", "1100", "0800", "0500", "0200"};
+        String popBase = popBaseTimes[popBaseTimes.length - 1];
         for (String popBaseTime : popBaseTimes) {
-            if (Integer.parseInt(popBaseTime) < Integer.parseInt(baseTime)) {
-                baseTime = popBaseTime;
+            if (Integer.parseInt(popBaseTime) < Integer.parseInt(curTime)) {
+                popBase = popBaseTime;
                 break;
             }
         }
@@ -101,7 +103,7 @@ public class WalkIndexService {
         urlBuilder.append("&").append(URLEncoder.encode("numOfRows", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("10", StandardCharsets.UTF_8)); /*한 페이지 결과 수*/
         urlBuilder.append("&").append(URLEncoder.encode("dataType", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode("json", StandardCharsets.UTF_8)); /*요청자료형식(XML/JSON) Default: XML*/
         urlBuilder.append("&").append(URLEncoder.encode("base_date", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(baseDate, StandardCharsets.UTF_8)); /*‘21년 6월 28일 발표*/
-        urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(baseTime, StandardCharsets.UTF_8)); /*06시 발표(정시단위) */
+        urlBuilder.append("&").append(URLEncoder.encode("base_time", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(popBase, StandardCharsets.UTF_8)); /*06시 발표(정시단위) */
         urlBuilder.append("&").append(URLEncoder.encode("nx", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(nx), StandardCharsets.UTF_8)); /*예보지점의 X 좌표값*/
         urlBuilder.append("&").append(URLEncoder.encode("ny", StandardCharsets.UTF_8)).append("=").append(URLEncoder.encode(String.valueOf(ny), StandardCharsets.UTF_8)); /*예보지점의 Y 좌표값*/
         URL popUrl = new URL(urlBuilder.toString());
