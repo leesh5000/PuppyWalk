@@ -149,8 +149,8 @@ public class WalkIndexService {
         try {
 
             conn = (HttpURLConnection) url.openConnection();
-            conn.setConnectTimeout(5000);
-            conn.setReadTimeout(5000);
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
             conn.setRequestProperty("Content-type", "application/json");
             conn.setDoOutput(true);
 
